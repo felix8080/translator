@@ -20,7 +20,7 @@
         }
         textarea {
             width: 100%;
-            height: 400px;
+            height: 600px;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -56,6 +56,12 @@
         button:nth-child(3):hover {
             background-color: #d32f2f;
         }
+        button:nth-child(4) {
+            background-color: #FFC107;
+        }
+        button:nth-child(4):hover {
+            background-color: #FFA000;
+        }
     </style>
 </head>
 <body>
@@ -67,13 +73,14 @@
         </div>
         <div class="text-area">
             <h3>转换结果：</h3>
-            <textarea id="outputText" placeholder="在这里显示转换后的结果" readonly></textarea>
+            <textarea id="outputText" placeholder="在这里显示转换后的结果"></textarea>
         </div>
     </div>
     <div class="buttons">
         <button onclick="convertToSimplified()">繁体转简体</button>
         <button onclick="convertToTraditional()">简体转繁体</button>
         <button onclick="copyResult()">复制结果</button>
+        <button onclick="clearText()">清除文字</button>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/full.min.js"></script>
     <script>
@@ -112,6 +119,11 @@
             } catch (err) {
                 alert('复制失败，请手动复制');
             }
+        }
+
+        function clearText() {
+            document.getElementById('inputText').value = '';
+            document.getElementById('outputText').value = '';
         }
     </script>
 </body>

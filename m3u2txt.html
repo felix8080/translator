@@ -20,7 +20,7 @@
         }
         textarea {
             width: 100%;
-            height: 400px;
+            height: 600px;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -56,6 +56,12 @@
         button:nth-child(3):hover {
             background-color: #d32f2f;
         }
+        button:nth-child(4) {
+            background-color: #FFC107;
+        }
+        button:nth-child(4):hover {
+            background-color: #FFA000;
+        }
     </style>
 </head>
 <body>
@@ -67,20 +73,22 @@
         </div>
         <div class="text-area">
             <h3>转换结果：</h3>
-            <textarea id="outputText" placeholder="在这里显示转换后的结果" readonly></textarea>
+            <textarea id="outputText" placeholder="在这里显示转换后的结果"></textarea>
         </div>
     </div>
     <div class="buttons">
         <button onclick="convertToM3U()">TXT转M3U</button>
         <button onclick="convertToTXT()">M3U转TXT</button>
         <button onclick="copyResult()">复制结果</button>
+        <button onclick="clearText()">清除文字</button>
     </div>
     <script>
         function convertToM3U() {
             const input = document.getElementById('inputText').value;
             const lines = input.trim().split('\n');
-            let output = '#EXTM3U x-tvg-url="https://live.fanmingming.com/e.xml"\n';
+            let output = '#EXTM3U x-tvg-url="https://live.fanmingming.com/e.xml"\n\n';
             let currentGroup = '';
+            let isFirstGroup = true;
             
             lines.forEach(line => {
                 line = line.trim();
@@ -89,6 +97,10 @@
                 // 检查是否是分组行
                 if (line.includes(',#genre#')) {
                     currentGroup = line.split(',')[0];
+                    if (!isFirstGroup) {
+                        output += '\n'; // 在不同分组之间添加空行
+                    }
+                    isFirstGroup = false;
                     return;
                 }
                 
@@ -109,12 +121,34 @@
             const input = document.getElementById('inputText').value;
             const lines = input.trim().split('\n');
             let output = '';
+            let groups = new Map(); // 用于存储不同分组的频道
             
-            lines.forEach(line => {
-                if (!line.startsWith('#')) {
-                    output += line.trim() + '\n';
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (line.startsWith('#EXTINF:-1')) {
+                    // 解析频道信息
+                    const groupMatch = line.match(/group-title="([^"]+)"/);
+                    const nameMatch = line.match(/,([^,]+)$/);
+                    
+                    if (groupMatch && nameMatch && i + 1 < lines.length) {
+                        const groupTitle = groupMatch[1];
+                        const channelName = nameMatch[1].trim();
+                        const url = lines[i + 1].trim();
+                        
+                        // 将频道添加到对应分组
+                        if (!groups.has(groupTitle)) {
+                            groups.set(groupTitle, []);
+                        }
+                        groups.get(groupTitle).push(`${channelName},${url}`);
+                    }
                 }
-            });
+            }
+            
+            // 按分组构建输出
+            for (const [groupTitle, channels] of groups) {
+                output += `${groupTitle},#genre#\n`;
+                output += channels.join('\n') + '\n\n';
+            }
             
             document.getElementById('outputText').value = output.trim();
         }
@@ -132,6 +166,11 @@
             } catch (err) {
                 alert('复制失败，请手动复制');
             }
+        }
+
+        function clearText() {
+            document.getElementById('inputText').value = '';
+            document.getElementById('outputText').value = '';
         }
     </script>
 </body>
