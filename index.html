@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>中文繁简体转换工具</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .text-area {
+            flex: 1;
+        }
+        textarea {
+            width: 100%;
+            height: 400px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: none;
+        }
+        .buttons {
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>中文繁简体转换工具</h1>
+    <div class="container">
+        <div class="text-area">
+            <h3>输入文本：</h3>
+            <textarea id="inputText" placeholder="请在此输入或粘贴要转换的文本"></textarea>
+        </div>
+        <div class="text-area">
+            <h3>转换结果：</h3>
+            <textarea id="outputText" readonly></textarea>
+        </div>
+    </div>
+    <div class="buttons">
+        <button onclick="convertToSimplified()">繁体转简体</button>
+        <button onclick="convertToTraditional()">简体转繁体</button>
+        <button onclick="copyResult()">复制结果</button>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/opencc.min.js"></script>
+    <script>
+        const Converter = OpenCC.Converter({ 
+            from: 'tw', 
+            to: 'cn'
+        });
+        
+        const ConverterReverse = OpenCC.Converter({ 
+            from: 'cn', 
+            to: 'tw'
+        });
+
+        function convertToSimplified() {
+            const input = document.getElementById('inputText').value;
+            const output = Converter(input);
+            document.getElementById('outputText').value = output;
+        }
+
+        function convertToTraditional() {
+            const input = document.getElementById('inputText').value;
+            const output = ConverterReverse(input);
+            document.getElementById('outputText').value = output;
+        }
+
+        function copyResult() {
+            const outputText = document.getElementById('outputText');
+            outputText.select();
+            try {
+                navigator.clipboard.writeText(outputText.value).then(() => {
+                    alert('已复制到剪贴板！');
+                }).catch(err => {
+                    document.execCommand('copy');
+                    alert('已复制到剪贴板！');
+                });
+            } catch (err) {
+                alert('复制失败，请手动复制');
+            }
+        }
+    </script>
+</body>
+</html> 
