@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>在线工具集合</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 导航栏样式优化 */
+        .nav {
+            background-color: #f8f9fa;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            position: sticky;
+            top: 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .nav-item {
+            color: #333;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .nav-item:hover {
+            background-color: #e9ecef;
+            color: #2196F3;
+        }
+        .nav-item.active {
+            background-color: #2196F3;
+            color: white;
+        }
+        .nav-item.active:hover {
+            background-color: #1976D2;
+            color: white;
+        }
+
+        /* 工具页面容器 */
+        .tool-page {
+            display: none;
+        }
+        .tool-page.active {
+            display: block;
+        }
+
+        /* 通用样式 */
+        .container {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 20px;
+        }
+        .text-area {
+            flex: 1;
+        }
+        textarea {
+            width: 100%;
+            height: 600px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: none;
+        }
+        .buttons {
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            font-size: 16px;
+            cursor: pointer;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        
+        /* 繁简转换工具按钮样式 */
+        #cn2tw-page button:nth-child(1) {
+            background-color: #2196F3;
+        }
+        #cn2tw-page button:nth-child(1):hover {
+            background-color: #1976D2;
+        }
+        #cn2tw-page button:nth-child(2) {
+            background-color: #4CAF50;
+        }
+        #cn2tw-page button:nth-child(2):hover {
+            background-color: #45a049;
+        }
+        #cn2tw-page button:nth-child(3) {
+            background-color: #f44336;
+        }
+        #cn2tw-page button:nth-child(3):hover {
+            background-color: #d32f2f;
+        }
+        #cn2tw-page button:nth-child(4) {
+            background-color: #FFC107;
+        }
+        #cn2tw-page button:nth-child(4):hover {
+            background-color: #FFA000;
+        }
+
+        /* 添加新的 M3U 工具按钮样式 */
+        #m3u-page button:nth-child(1) {
+            background-color: #2196F3;
+        }
+        #m3u-page button:nth-child(1):hover {
+            background-color: #1976D2;
+        }
+        #m3u-page button:nth-child(2) {
+            background-color: #4CAF50;
+        }
+        #m3u-page button:nth-child(2):hover {
+            background-color: #45a049;
+        }
+        #m3u-page button:nth-child(3) {
+            background-color: #f44336;
+        }
+        #m3u-page button:nth-child(3):hover {
+            background-color: #d32f2f;
+        }
+        #m3u-page button:nth-child(4) {
+            background-color: #FFC107;
+        }
+        #m3u-page button:nth-child(4):hover {
+            background-color: #FFA000;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <div class="nav">
+        <div class="nav-container">
+            <a class="nav-item active" onclick="switchTool('m3u-page')">M3U转换工具</a>
+            <a class="nav-item" onclick="switchTool('cn2tw-page')">中文繁简转换</a>
+        </div>
+    </div>
+
+    <!-- M3U转换工具 -->
+    <div id="m3u-page" class="tool-page active">
+        <h1>M3U与TXT格式转换工具</h1>
+        <div class="container">
+            <div class="text-area">
+                <h3>输入文本：</h3>
+                <textarea id="m3uInput" placeholder="请在此输入或粘贴要转换的文本"></textarea>
+            </div>
+            <div class="text-area">
+                <h3>转换结果：</h3>
+                <textarea id="m3uOutput" placeholder="在这里显示转换后的结果"></textarea>
+            </div>
+        </div>
+        <div class="buttons">
+            <button onclick="convertToM3U()">TXT转M3U</button>
+            <button onclick="convertToTXT()">M3U转TXT</button>
+            <button onclick="copyM3UResult()">复制结果</button>
+            <button onclick="clearM3UText()">清除文字</button>
+        </div>
+    </div>
+
+    <!-- 繁简转换工具 -->
+    <div id="cn2tw-page" class="tool-page">
+        <h1>中文繁简体转换工具</h1>
+        <div class="container">
+            <div class="text-area">
+                <h3>输入文本：</h3>
+                <textarea id="cnInput" placeholder="请在此输入或粘贴要转换的文本"></textarea>
+            </div>
+            <div class="text-area">
+                <h3>转换结果：</h3>
+                <textarea id="cnOutput" placeholder="在这里显示转换后的结果"></textarea>
+            </div>
+        </div>
+        <div class="buttons">
+            <button onclick="convertToSimplified()">繁体转简体</button>
+            <button onclick="convertToTraditional()">简体转繁体</button>
+            <button onclick="copyCnResult()">复制结果</button>
+            <button onclick="clearCnText()">清除文字</button>
+        </div>
+    </div>
+
+    <!-- OpenCC库 -->
+    <script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/full.min.js"></script>
+    
+    <script>
+        // 页面切换功能
+        function switchTool(pageId) {
+            document.querySelectorAll('.tool-page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            document.getElementById(pageId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // M3U转换功能
+        function convertToM3U() {
+            const input = document.getElementById('m3uInput').value;
+            const lines = input.trim().split('\n');
+            let output = '#EXTM3U x-tvg-url="https://live.fanmingming.com/e.xml"\n\n';
+            let currentGroup = '';
+            let isFirstGroup = true;
+            
+            lines.forEach(line => {
+                line = line.trim();
+                if (!line) return;
+                
+                // 检查是否是分组行
+                if (line.includes(',#genre#')) {
+                    currentGroup = line.split(',')[0];
+                    if (!isFirstGroup) {
+                        output += '\n'; // 在不同分组之间添加空行
+                    }
+                    isFirstGroup = false;
+                    return;
+                }
+                
+                // 处理频道行
+                if (line.includes(',')) {
+                    const [channelName, url] = line.split(',');
+                    if (url) {
+                        output += `#EXTINF:-1,tvg-name="${channelName}" tvg-logo="https://live.fanmingming.com/tv/${channelName}.png" group-title="${currentGroup}",${channelName}\n`;
+                        output += `${url}\n`;
+                    }
+                }
+            });
+            
+            document.getElementById('m3uOutput').value = output;
+        }
+
+        function convertToTXT() {
+            const input = document.getElementById('m3uInput').value;
+            const lines = input.trim().split('\n');
+            let output = '';
+            let groups = new Map(); // 用于存储不同分组的频道
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (line.startsWith('#EXTINF:-1')) {
+                    // 解析频道信息
+                    const groupMatch = line.match(/group-title="([^"]+)"/);
+                    const nameMatch = line.match(/,([^,]+)$/);
+                    
+                    if (groupMatch && nameMatch && i + 1 < lines.length) {
+                        const groupTitle = groupMatch[1];
+                        const channelName = nameMatch[1].trim();
+                        const url = lines[i + 1].trim();
+                        
+                        // 将频道添加到对应分组
+                        if (!groups.has(groupTitle)) {
+                            groups.set(groupTitle, []);
+                        }
+                        groups.get(groupTitle).push(`${channelName},${url}`);
+                    }
+                }
+            }
+            
+            // 按分组构建输出
+            for (const [groupTitle, channels] of groups) {
+                output += `${groupTitle},#genre#\n`;
+                output += channels.join('\n') + '\n\n';
+            }
+            
+            document.getElementById('m3uOutput').value = output.trim();
+        }
+
+        // 繁简转换功能
+        const Converter = OpenCC.Converter({ 
+            from: 'tw', 
+            to: 'cn'
+        });
+        
+        const ConverterReverse = OpenCC.Converter({ 
+            from: 'cn', 
+            to: 'tw'
+        });
+
+        function convertToSimplified() {
+            const input = document.getElementById('cnInput').value;
+            const output = Converter(input);
+            document.getElementById('cnOutput').value = output;
+        }
+
+        function convertToTraditional() {
+            const input = document.getElementById('cnInput').value;
+            const output = ConverterReverse(input);
+            document.getElementById('cnOutput').value = output;
+        }
+
+        function copyM3UResult() {
+            const outputText = document.getElementById('m3uOutput');
+            outputText.select();
+            try {
+                navigator.clipboard.writeText(outputText.value).then(() => {
+                    alert('已复制到剪贴板！');
+                }).catch(err => {
+                    document.execCommand('copy');
+                    alert('已复制到剪贴板！');
+                });
+            } catch (err) {
+                alert('复制失败，请手动复制');
+            }
+        }
+
+        function clearM3UText() {
+            document.getElementById('m3uInput').value = '';
+            document.getElementById('m3uOutput').value = '';
+        }
+
+        function copyCnResult() {
+            const outputText = document.getElementById('cnOutput');
+            outputText.select();
+            try {
+                navigator.clipboard.writeText(outputText.value).then(() => {
+                    alert('已复制到剪贴板！');
+                }).catch(err => {
+                    document.execCommand('copy');
+                    alert('已复制到剪贴板！');
+                });
+            } catch (err) {
+                alert('复制失败，请手动复制');
+            }
+        }
+
+        function clearCnText() {
+            document.getElementById('cnInput').value = '';
+            document.getElementById('cnOutput').value = '';
+        }
+    </script>
+</body>
+</html>
