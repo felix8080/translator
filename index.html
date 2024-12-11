@@ -262,15 +262,15 @@
 <body>
     <!-- 导航栏 -->
     <div class="nav">
-        <div class="nav-container">
-            <a class="nav-item active" onclick="switchTool('decrypt-page')">接口解密工具</a>
-            <a class="nav-item" onclick="switchTool('m3u-page')">M3U转换工具</a>
+        <div class="nav-container">          
+            <a class="nav-item active" onclick="switchTool('m3u-page')">M3U转换工具</a>
             <a class="nav-item" onclick="switchTool('cn2tw-page')">中文繁简转换</a>
+            <a class="nav-item" onclick="switchTool('decrypt-page')">接口解密工具</a>
         </div>
     </div>
 
     <!-- M3U转换工具 -->
-    <div id="m3u-page" class="tool-page">
+    <div id="m3u-page" class="tool-page active">
         <h1>M3U与TXT格式转换工具</h1>
         <div class="container">
             <div class="text-area">
@@ -312,7 +312,7 @@
     </div>
 
     <!-- 接口解密工具 -->
-    <div id="decrypt-page" class="tool-page active">
+    <div id="decrypt-page" class="tool-page">
         <h1>接口解密工具</h1>
         <div class="url-container">
             <input type="text" id="urlInput" placeholder="请输入需要解密的URL地址" />
@@ -374,7 +374,7 @@
                 if (line.includes(',')) {
                     const [channelName, url] = line.split(',');
                     if (url) {
-                        output += `#EXTINF:-1,tvg-name="${channelName}" tvg-logo="https://live.fanmingming.com/tv/${channelName}.png" group-title="${currentGroup}",${channelName}\n`;
+                        output += `#EXTINF:-1 tvg-name="${channelName}" tvg-logo="https://live.fanmingming.com/tv/${channelName}.png" group-title="${currentGroup}",${channelName}\n`;
                         output += `${url}\n`;
                     }
                 }
